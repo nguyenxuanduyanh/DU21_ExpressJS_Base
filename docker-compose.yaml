@@ -11,22 +11,27 @@ services:
     environment:
       - DB_HOST=${DB_HOST}
       - DB_DATABASE=${DB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=$DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
       # - REDIS_HOST=${REDIS_HOST}
       # - REDIS_PORT=${REDIS_PORT}
       # - DB_PORT=${DB_PORT}
     ports:
       - 8089:8089
+    network_mode: host
     restart: unless-stopped
     depends_on:
         - redis
         - db
-  
+
   db:
     image: mongo
     volumes:
       - .docker/data/db:/data/db
     restart: unless-stopped
-  
+    ports: 
+      - 27017:27017
+
   redis:
     image: redis:5-alpine
     volumes:
